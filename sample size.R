@@ -49,7 +49,8 @@ impact.sim <- function(pop=kis.pop, starting.count=3000, old.mod=drop.mod,
   p.vec <- (starting.count + drop.vec) / pop
   
   #simulating count data for 5 years
-  sim.data <- data.frame(year=1:5, matrix(rbinom(nsim * 5, pop, p.vec), nrow=5) / pop)  
+  sim.data <- data.frame(year=1:5,
+                         matrix(rbinom(nsim * 5, pop, p.vec), nrow=5) / pop)  
   
   #empty matrix to hold the stats from the t-test 
   slopes <- matrix(NA, nrow=1, ncol=numeric(nsim))
@@ -68,7 +69,12 @@ impact.sim <- function(pop=kis.pop, starting.count=3000, old.mod=drop.mod,
   }
   
   if(!power.only){
-    return(list(data=sim.data, slopes=slopes, ses=ses, stats=stats, pvals=pvals, power=sum(pvals <= 1 - conf, na.rm=T) / length(pvals)))   
+    return(list(data=sim.data,
+                slopes=slopes,
+                ses=ses,
+                stats=stats,
+                pvals=pvals,
+                power=sum(pvals <= 1 - conf, na.rm=T) / length(pvals)))   
   } else{
     return(power=sum(pvals <= 1 - conf, na.rm=T) / length(pvals))    
   }
@@ -79,7 +85,10 @@ slope.vec <- seq(.1, 2, by=.05)
 
 #plotting the lines
 library(Hmisc, quietly=T)
-plot(slope.vec, slope.vs.power, main=c('Slope vs. power'), xlab=c('Slope increase (proportion of original)'), 
+plot(slope.vec,
+     slope.vs.power,
+     main=c('Slope vs. power'),
+     xlab=c('Slope increase (proportion of original)'), 
      ylab=c('Power'))
 lines(smooth.spline(slope.vec, slope.vs.power))
 abline(h=.8, lty=3)
